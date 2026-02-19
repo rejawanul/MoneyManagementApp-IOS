@@ -1,18 +1,12 @@
-//
-//  MoneyManagementApApp.swift
-//  MoneyManagementAp
-//
-//  Created by MD REJAWANUL HAQUE TONMOY on 19/2/26.
-//
-
 import SwiftUI
 import SwiftData
 
 @main
-struct MoneyManagementApApp: App {
+struct MoneyManagementApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Transaction.self,
+            MonthlyBudget.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
