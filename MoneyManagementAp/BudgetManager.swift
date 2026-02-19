@@ -91,6 +91,16 @@ class BudgetManager {
         return budgetAmount - spent(category: category)
     }
     
+    func deleteTransaction(_ transaction: Transaction) {
+        guard let context = modelContext else { return }
+        context.delete(transaction)
+        do {
+            try context.save()
+        } catch {
+            print("Failed to delete transaction: \(error)")
+        }
+    }
+    
     var totalSaved: Double {
         guard let budget = currentBudget else { return 0 }
         let totalBudget = budget.treatBudgetTotal + budget.personalBudgetTotal

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		B51CE98C2F46F97C009CB3F0 /* MoneyManagementAp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoneyManagementAp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B51CE98C2F46F97C009CB3F0 /* MoneyManagementAp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = MoneyManagementAp.app; path = "/Volumes/SSD/Xcode/MoneyManagementAp/build/Debug-iphoneos/MoneyManagementAp.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,16 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				B51CE98E2F46F97C009CB3F0 /* MoneyManagementAp */,
-				B51CE98D2F46F97C009CB3F0 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		B51CE98D2F46F97C009CB3F0 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				B51CE98C2F46F97C009CB3F0 /* MoneyManagementAp.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,7 +86,7 @@
 			mainGroup = B51CE9832F46F97C009CB3F0;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = B51CE98D2F46F97C009CB3F0 /* Products */;
+			productRefGroup = B51CE9832F46F97C009CB3F0;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (

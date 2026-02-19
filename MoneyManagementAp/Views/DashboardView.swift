@@ -3,6 +3,8 @@ import SwiftUI
 struct DashboardView: View {
     @Environment(BudgetManager.self) private var budgetManager
     @State private var showingAddTransaction = false
+    @State private var showingResetConfirmation = false
+    @Binding var selectedTab: Int
     
     var body: some View {
         NavigationStack {
@@ -45,17 +47,23 @@ struct DashboardView: View {
                     Divider()
                         .padding(.horizontal)
                     
-                    // Transaction List Preview (Last 5? or All?)
-                    // For now, let's list all for "Transaction History" compliance on home screen
-                    VStack(alignment: .leading, spacing: 15) {
+                    // Transaction List Preview
+                    VStack(alignment: .leading, spacing: 8) {
                         Text("Recent Transactions")
                             .font(.headline)
                             .padding(.horizontal)
                         
                         if let transactions = budgetManager.currentBudget?.transactions.sorted(by: { $0.date > $1.date }), !transactions.isEmpty {
-                            ForEach(transactions) { transaction in
-                                TransactionRow(transaction: transaction)
+                            List {
+                                ForEach(transactions) { transaction in
+                                    TransactionRow(transaction: transaction)
+                                }
+                                .onDelete { indexSet in
+                                    indexSet.forEach { budgetManager.deleteTransaction(transactions[$0]) }
+                                }
                             }
+                            .listStyle(.plain)
+                            .frame(height: CGFloat(transactions.count) * 60)
                         } else {
                             ContentUnavailableView("No transactions yet", systemImage: "list.bullet.clipboard")
                                 .frame(height: 200)
@@ -77,8 +85,12 @@ struct DashboardView: View {
                 ToolbarItem(placement: .topBarLeading) {
                    // Placeholder for Reset/Menu
                    Menu {
-                       Button("End Date & Summary", action: { /* TODO */ })
-                       Button("Reset Month", role: .destructive, action: { /* TODO */ })
+                       Button("End Date & Summary") {
+                           selectedTab = 2
+                       }
+                       Button("Reset Month", role: .destructive) {
+                           showingResetConfirmation = true
+                       }
                    } label: {
                        Image(systemName: "ellipsis.circle")
                    }
@@ -86,6 +98,14 @@ struct DashboardView: View {
             }
             .sheet(isPresented: $showingAddTransaction) {
                 AddTransactionView()
+            }
+            .alert("Reset Month?", isPresented: $showingResetConfirmation) {
+                Button("Cancel", role: .cancel) { }
+                Button("Reset", role: .destructive) {
+                    budgetManager.archiveCurrentBudget()
+                }
+            } message: {
+                Text("This will archive the current month's budget. You'll need to set up a new one.")
             }
         }
     }
@@ -98,7 +118,7 @@ struct BudgetCard: View {
     let color: Color
     
     var remaining: Double {
-        max(total - spent, 0)
+        total - spent
     }
     
     var progress: Double {
@@ -120,9 +140,10 @@ struct BudgetCard: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("৳\(remaining, specifier: "%.0f")")
                     .font(.system(size: 24, weight: .bold))
-                Text("left of ৳\(total, specifier: "%.0f")")
+                    .foregroundStyle(remaining < 0 ? .red : .primary)
+                Text(remaining < 0 ? "over budget" : "left of ৳\(total, specifier: "%.0f")")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(remaining < 0 ? .red : .secondary)
             }
             
             ProgressView(value: progress)
